@@ -8,10 +8,9 @@ from rest_framework.response import Response
 from django.db.models import Q
 from django.db.models import Max,Aggregate
 from rest_framework.permissions import IsAuthenticated
+from datetime import datetime
 
 from api.Screening import get_docs_list
-
-
 
 
 class DocView(generics.ListAPIView):
@@ -26,24 +25,24 @@ class DocView(generics.ListAPIView):
     def get_queryset(self):
         query = self.request.GET.get("id")
         qs = docs.objects.all()
-        print (query)
 
         if query is not None:
             documents_scanned=get_docs_list(query)
+            request_date=datetime.now().timestamp()
+            print(request_date)
             print (documents_scanned)
 
             for doc in documents_scanned:
-                new_entry = docs(client_id=query,
+                new_entry = docs(
+                client_id=query,
                 doc_name=doc[0],
-                date_created=doc[1]
-                
+                date_created=doc[1],
+                screen_vs=request_date
                 )
                 new_entry.save()
 
             qs = docs.objects.all().filter(
-                    Q(client_id=query))
-            # max_id = qs.aggregate(Max('id'))
-            # qs = qs.filter(
-            #     Q(id=max_id['id__max']))
-
+                    Q(client_id=query),
+                    Q(screen_vs=request_date)
+                    )
         return qs

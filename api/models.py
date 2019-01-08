@@ -10,6 +10,8 @@ class docs(models.Model):
     doc_type = models.CharField(max_length=255, blank=True)
     digitalized_by = models.CharField(max_length=255, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
+    file_path = models.CharField(max_length=255, blank=True)
+    screen_vs = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         """Return a human readable representation of the model instance."""

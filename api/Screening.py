@@ -1,8 +1,14 @@
 import os
 import datetime
 
+#This is for local deployment
+# AccountPackages_path=r"C:\Users\hmina\Desktop\AccountPackages\AccountPackages"
 
-AccountPackages_path=r"C:\Users\hmina\Desktop\AccountPackages\AccountPackages"
+# This is for pythanywheredeployment
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+AccountPackages_path = os.path.join(os.path.join(BASE_DIR, "media"),"accountpackages")
+
+
 
 def get_docs_list(client_id):
     result=[]
@@ -16,5 +22,6 @@ def get_docs_list(client_id):
             doc_info.append(file)
             doc_info.append(datetime.datetime.fromtimestamp(os.path.getctime(os.path.join(client_folder,file))))
             result.append(doc_info)
+
 
     return result
